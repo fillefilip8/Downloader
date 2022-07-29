@@ -35,8 +35,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - id: imageName
+        uses: ASzc/change-string-case-action@v2
+        with:
+          string: ${{ env.IMAGE_NAME }}
+
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: ${{ env.IMAGE_NAME }}:${{ matrix.tag }}
+          tags: ${{ steps.imageName.outputs.lowercase }}:${{ matrix.tag }}
