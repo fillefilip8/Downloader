@@ -1,2 +1,2 @@
 # Downloader
-A simple file downloader made in C# (Docker images for Windows and Linux are available)
+A simple file downloader made in .NET 6
