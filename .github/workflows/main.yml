@@ -44,4 +44,4 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: ${{ steps.imageName.outputs.lowercase }}:${{ matrix.tag }}
+          tags: ${{ env.REGISTRY }}/${{ steps.imageName.outputs.lowercase }}:${{ matrix.tag }}
