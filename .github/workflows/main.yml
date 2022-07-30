@@ -14,11 +14,14 @@ jobs:
         os: [ubuntu-latest, windows-2019, windows-2022]
         include:
         - os: ubuntu-latest
+          base: 6.0-bullseye-slim-amd64
           tag: linux
         - os: windows-2019
-          tag: windows-2019
+          base: 6.0-windowsservercore-ltsc2019
+          tag: windows-ltsc2019-amd64
         - os: windows-2022
-          tag: windows-2022
+          base: 6.0-nanoserver-ltsc2022
+          tag: windows-ltsc2022-amd64
     runs-on: ${{ matrix.os }}
     permissions:
       contents: read
@@ -39,9 +42,9 @@ jobs:
         uses: ASzc/change-string-case-action@v2
         with:
           string: ${{ env.IMAGE_NAME }}
-
-      - name: Build and push
-        uses: docker/build-push-action@v3
-        with:
-          push: true
-          tags: ${{ env.REGISTRY }}/${{ steps.imageName.outputs.lowercase }}:${{ matrix.tag }}
+      - name: Docker Build
+        run: |
+          docker build --build-arg BASE=${{ matrix.base }} -t ${{ env.REGISTRY }}/${{ steps.imageName.outputs.lowercase }}:${{ matrix.tag }} .
+      - name: Docker Push
+        run: |
+          docker push ${{ env.REGISTRY }}/${{ steps.imageName.outputs.lowercase }}:${{ matrix.tag }}
